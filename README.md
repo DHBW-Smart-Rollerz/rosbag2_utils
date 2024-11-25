@@ -1,35 +1,49 @@
-# ROS2 Rosbags Utils Package
+# ROS2 Rosbag Utils Package
 
-[![Build Test](https://github.com/DHBW-Smart-Rollerz/ros2_exaple_package/actions/workflows/build-test.yaml/badge.svg)](https://github.com/DHBW-Smart-Rollerz/ros2_exaple_package/actions/workflows/build-test.yaml)
+[![Build Test](https://github.com/DHBW-Smart-Rollerz/rosbag2_utils/actions/workflows/build-test.yaml/badge.svg)](https://github.com/DHBW-Smart-Rollerz/rosbag2_utils/actions/workflows/build-test.yaml)
 
-This repository contains an example package for ros2 (python).
+This repository contains the rosbag2_utils package with a collection of helpful rosbag nodes.
+
+## Installation
+
+1. Clone the package into the `smarty_workspace/src` directory:
+   ```bash
+   git clone <repository-url> smarty_workspace/src
+   ```
+2. Install the required Python dependencies using the `requirements.txt` file:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Please set the following ENV variable in your .bashrc/.zshrc if not already done:
+   ```bash
+   PYTHON_EXECUTABLE="/home/$USER/.pyenv/versions/default/bin/python3" # Change this to the python3 executable path of your pyenv
+   ```
 
 ## Usage
 
-This repository can be used as template. Simply select this repo when creating a new repository under template.
+This repository is a collection of standalone nodes.
 
-Alternatively, you can create python ros packages with:
+### RosbagToImages
 
+This node provides functionality for exporting images from a ROS2 bag. It offers optional features to undistort the images and apply the bird's-eye view transformation, utilizing the [camera_preprocessing](https://github.com/DHBW-Smart-Rollerz/camera_preprocessing) package.  
+**IMPORTANT!** Proper results require the camera_preprocessing package ithe be calibrated with the same chessboard and camera/lens used during the recording of the ROS bag. Refer to the [camera_preprocessing](https://github.com/DHBW-Smart-Rollerz/camera_preprocessing) documentation for detailed calibration instructions.
+
+Additionally, the interval in which the frames/images are exported can be specified in case not every image is required. The bags are mostly captured in 30fps and therefore it is recommended to use only every 5th frame.
+
+It is also possible to control the number of image extractions by specifying a frame interval if not every image is needed. The rosbags are mostly captured in 30fps and therefore it is recommended to use only every 5th image.
+
+To launch the node, use the following command from the folder the rosbags are saved in:
 ```bash
-# If not already created
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
-
-# Create package
-ros2 pkg create my_package --build-type ament_python --dependencies rclpy
-
-# Build
-cd ~/ros2_ws/src
-colcon build --symlink-install --packages-select my_package
+ros2 launch rosbag2_utils rosbag_to_images.launch.py
 ```
+The node will find all rosbags recursively and export them into seperate folders. If required, the input and output directory can be changed in the config file.
 
 ## Structure
 
 - `config/`: All configurations (most of the time yaml files)
 - `launch/`: Contains all launch files. Launch files can start multiple nodes with yaml-configurations
-- `models/`: Contains all models (optional) and only necessary for machine learning nodes
 - `resource/`: Contains the package name (required to build with colcon)
-- `ros2_example_package`: Contains all nodes and sources for the ros package
+- `rosbag2_utils`: Contains all nodes and sources for the ros package
 - `test/`: Contains all tests
 - `package.xml`: Contains metadata about the package
 - `setup.py`: Used for Python package configuration
