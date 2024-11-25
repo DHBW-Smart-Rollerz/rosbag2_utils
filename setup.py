@@ -1,9 +1,9 @@
-import glob
 import os
 
+from setup_utils import include_directory
 from setuptools import find_packages, setup
 
-package_name = "ros2_example_package"
+package_name = "rosbag2_utils"
 
 setup(
     name=package_name,
@@ -12,15 +12,13 @@ setup(
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),
-        (
-            os.path.join("share", package_name, "launch"),
-            glob.glob(os.path.join("launch", "*launch.py")),
+        *include_directory(
+            install_path=os.path.join("share", package_name, "config"),
+            source_path="config",
         ),
-        (
-            os.path.join("share", package_name, "config"),
-            glob.glob(
-                os.path.join("config", "*.*")
-            ),  # TODO: Do we want to include all files?
+        *include_directory(
+            install_path=os.path.join("share", package_name, "launch"),
+            source_path="launch",
         ),
     ],
     install_requires=["setuptools"],
@@ -32,7 +30,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            f"ros2_example_node = {package_name}.ros2_example_node:main",
+            f"rosbag_to_images_node = {package_name}.rosbag_to_images_node:main",
         ],
     },
 )
