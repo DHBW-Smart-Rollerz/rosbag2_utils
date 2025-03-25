@@ -2,7 +2,7 @@ rosbag_to_images_node:
   ros__parameters:
     input_dir: "./"
     output_dir: "./rosbag_images/"
-    image_topic: "/camera/image_raw"
+    image_topic: "/camera/image/raw"
 
     frame_interval: 30
     undistort: true

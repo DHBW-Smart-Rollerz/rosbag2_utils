@@ -84,7 +84,7 @@ class RosbagToImagesNode(rclpy.node.Node):
 
         # Find .db3 files in the directory and return its parent directory as the
         # rosbag directory.
-        bag_files = glob.glob(dir + "/**/*.db3", recursive=True)
+        bag_files = glob.glob(dir + "/**/*.mcap", recursive=True)
         rosbag_dirs = list(set([os.path.dirname(bag_file) for bag_file in bag_files]))
 
         return rosbag_dirs
@@ -101,7 +101,7 @@ class RosbagToImagesNode(rclpy.node.Node):
         """
         storage_options = rosbag2_py.StorageOptions(
             uri=rosbag_dir,
-            storage_id="sqlite3",
+            storage_id="mcap",
         )
         converter_options = rosbag2_py.ConverterOptions(
             input_serialization_format="cdr",
